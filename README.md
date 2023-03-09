@@ -1,46 +1,38 @@
-## Data Structures and Algorithms, Recording
-### 28, Oct. 
 
-Q1: 给定一个数组arr，返回子数组的最大累加和
-例如，arr = [1, -2, 3, 5, -2, 6, -1]，所有子数组中，[3, 5, -2, 6]可以累加出最大的和12，所以返回12.
-[要求]时间复杂度为O(n)，空间复杂度为O(1)
+# 2023-3
 
-A1: 时间复杂度一定程度上也提示了遍历方式. N是一个自然的归纳提示.寻找递推关系前先要定义好dp[i].i一般作为结束端而不是开始端
+## Day 9 
+I briefly survey some interpolation approaches in the deep latent space. My short-term goal is to find a reliable unsupervised point cloud interpolation method in which the semantic manipulation can be conducted. 
 
-## Welcome to GitHub Pages
+### 1.Intrinsic Point Cloud Interpolation via Dual Latent Space Navigation, ECCV 2020;
+![图片](https://user-images.githubusercontent.com/49975503/224021199-86deb042-b11f-4a8e-8041-d8077bd23090.png)
+This work claims that the AE focuses on the reconstruction task while the latent space is not capable of linear interpolation. However, we can define some consecutive interpolation energy for mesh-based data. Thus, we can parallel the PC AE with a Mesh-edges AE, the Mesh-edges AE is regularized via traditional interpolation energy to enhance the structral information in the latent space. 
 
-You can use the [editor on GitHub](https://github.com/yhbian/yhbian.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+Q1: what is the relationship between local 【more instance-wise geodesic aware】 & global 【more structural latent space】?
+  
+G1: I guess if the encoder can capture the geodesic well, the morphing will be more smooth, leads to more structural latent space. 
+  
+### 2.IDEA-Net: Dynamic 3D Point Cloud Interpolation via Deep Embedding Alignment, 2022;
+![图片](https://user-images.githubusercontent.com/49975503/224030723-da1ec42c-7d72-4f22-a502-f5f6ad1e9bc3.png)
+Different from 1, this work is a supervised method for point cloud frame interpolation based on scene flow. The core of this method is to decompose the complicated scene flow into 【linear flow】 and 【non-linear flow residual】. For the non-linear part, it linearizes it by embedding the point into high-dimensional feature space. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Key1: The learned 【soft correspondence】 based on feature distances is useful!
 
-### Markdown
+Key2: The parallel from  $t$ from $0 \rightarrow 1$ & $1 \rightarrow 0$ formulates a natural regularizer for the time interpolation or shape homotopy.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Intuition1: work1 is high-level manipulation, work 2 is low-level manipulation, however, work2 also seeks for high-level features to capture the non-linear geodesic.
 
-```markdown
-Syntax highlighted code block
+### 3.LATENT IMAGE ANIMATOR: LEARNING TO ANIMATE IMAGES VIA LATENT SPACE NAVIGATION, ICLR 2022;
+![图片](https://user-images.githubusercontent.com/49975503/224035549-c00d41f2-ab92-4f38-8d09-defce7eba6e3.png)
 
-# Header 1
-## Header 2
-### Header 3
+This work find a set of 【orthogonal basis in the latent space】, each direction captures a kind of morphing.
 
-- Bulleted
-- List
+### 4.On Linear Interpolation in the Latent Space of Deep Generative Models， ICLR 2021; *
+![图片](https://user-images.githubusercontent.com/49975503/224036036-2497bf59-c2bc-4fbb-8b4e-4b61b8ee8a5f.png)
+This work proposes a method to capture how is the geodesics in the latent space apart from the straight line. There are many interesting details in this work, like:
 
-1. Numbered
-2. List
+Key1: how to get the 【pull-back metric】& geodesic, why optimization method rather than geodesic ODE.
 
-**Bold** and _Italic_ and `Code` text
+Key2: use B-splines to parameterize the geodesic, local controllable. 
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/yhbian/yhbian.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+TODO: I should explore the details in this work & some references. 
